@@ -21,8 +21,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { database, type Book } from "@/lib/db";
-import { parseExport, readExportFile, type ExportData } from "@/lib/storage/transfer";
+import { database } from "@/lib/db";
+import { parseExport, readExportFile, type StorageExport } from "@/lib/storage/transfer";
 import { useDatabaseTransfer } from "@/lib/storage/react";
 import { toast } from "sonner";
 
@@ -33,11 +33,13 @@ import { toast } from "sonner";
  */
 export default function SettingsPage() {
   const { state, exportToFile, importFromFile } = useDatabaseTransfer(database);
-  const [pending, setPending] = useState<{ file: File; data: ExportData } | null>(null);
+  const [pending, setPending] = useState<{ file: File; data: StorageExport } | null>(null);
 
   const importResult =
     state.kind === "imported"
-      ? `Imported: ${state.result.tables.map((table) => `${table.count} into ${table.name}`).join(", ")}.`
+      ? `Imported ${Object.entries(state.result.tables)
+          .map(([name, count]) => `${count} into ${name}`)
+          .join(", ")}.`
       : state.kind === "error"
         ? state.message
         : null;
@@ -60,7 +62,7 @@ export default function SettingsPage() {
   }
 
   const bookCount = pending
-    ? (pending.data.tables.books as Book[] | undefined)?.length ?? 0
+    ? (pending.data.tables.books as unknown[] | undefined)?.length ?? 0
     : 0;
 
   return (
