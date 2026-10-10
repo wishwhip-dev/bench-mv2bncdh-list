@@ -30,7 +30,7 @@ export function newId(): string {
   return globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
-export const database = defineDatabase<{ books: Book[] }>({
+export const database = defineDatabase<{ books: Book }>({
   // Part of the origin's storage identity. Renaming it does not migrate anything — it points the
   // application at a different, empty database and abandons the old one in place. That is exactly
   // what you want on a first build, and never what you want afterwards.
@@ -38,6 +38,6 @@ export const database = defineDatabase<{ books: Book[] }>({
   versions: [
     // Only the primary key and the properties queried on. `title`, `author` and `why` are stored
     // but never filtered or sorted by, so indexing them would cost writes and buy nothing.
-    { version: 1, stores: { books: "id, createdAt, done" } },
+    { version: 1, stores: { books: "id, createdAt" } },
   ],
 });
