@@ -52,7 +52,7 @@ export function BookCard({
             <p className="mt-2 text-sm leading-relaxed break-words text-pretty">{book.why}</p>
           )}
           <div className="mt-3 flex gap-2">
-            <Button variant="outline" size="sm" onClick={onEdit} disabled={book.done ? false : false}>
+            <Button variant="outline" size="sm" onClick={onEdit}>
               Edit
             </Button>
             <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={onDelete}>
